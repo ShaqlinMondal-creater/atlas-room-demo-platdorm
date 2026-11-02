@@ -964,6 +964,8 @@ code {
 .template-card {
   --card-accent: var(--accent-2);
   --card-soft: var(--accent-soft);
+  --card-on-soft: var(--ink);
+  --card-on-soft-muted: var(--muted);
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -1139,17 +1141,29 @@ code {
   padding: 10px;
   border-radius: 14px;
   background: var(--card-soft);
+  min-height: 4.4rem;
 }
 
 .template-meta dt {
-  color: var(--muted);
+  color: var(--card-on-soft-muted, var(--muted));
   font-size: 0.8rem;
 }
 
 .template-meta dd {
   margin: 2px 0 0;
-  color: var(--ink);
+  color: var(--card-on-soft);
   font-weight: 700;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.template-card.is-dark-soft .template-tags li {
+  color: var(--card-on-soft);
+  background: color-mix(in srgb, var(--card-soft) 88%, var(--card-accent));
+}
+
+.template-card.is-dark-soft .template-meta div {
+  background: color-mix(in srgb, var(--card-soft) 92%, var(--card-accent));
 }
 
 .card-action {

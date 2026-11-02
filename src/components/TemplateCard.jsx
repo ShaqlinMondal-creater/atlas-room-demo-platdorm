@@ -1,8 +1,28 @@
 import { IconArrow, IconClock, IconLock } from "./Icons";
 
+/** True when a hex background is dark enough that ink text would fail contrast. */
+function softIsDark(hex) {
+  const raw = String(hex || "").replace("#", "").trim();
+  if (raw.length !== 3 && raw.length !== 6) return false;
+  const full =
+    raw.length === 3
+      ? raw
+          .split("")
+          .map((c) => c + c)
+          .join("")
+      : raw;
+  const r = parseInt(full.slice(0, 2), 16);
+  const g = parseInt(full.slice(2, 4), 16);
+  const b = parseInt(full.slice(4, 6), 16);
+  // Relative luminance (sRGB)
+  const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+  return lum < 0.45;
+}
+
 export default function TemplateCard({ template, unlocked, onOpen }) {
   const accent = template.theme?.accent || "#2f6f4e";
   const soft = template.theme?.soft || "#e7f2ea";
+  const darkSoft = softIsDark(soft);
   const available = template.available !== false;
   const thumb = template.thumbnail;
 
@@ -10,10 +30,12 @@ export default function TemplateCard({ template, unlocked, onOpen }) {
     <article
       className={`template-card ${unlocked ? "is-open" : "is-locked"} ${
         available ? "" : "is-soon"
-      }`}
+      } ${darkSoft ? "is-dark-soft" : ""}`}
       style={{
         "--card-accent": accent,
         "--card-soft": soft,
+        "--card-on-soft": darkSoft ? "#e8eef8" : "var(--ink)",
+        "--card-on-soft-muted": darkSoft ? "#9aa8c0" : "var(--muted)",
       }}
     >
       <button type="button" className="template-card-hit" onClick={() => onOpen(template)}>

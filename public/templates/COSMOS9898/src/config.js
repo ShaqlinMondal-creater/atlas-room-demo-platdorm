@@ -19,7 +19,7 @@ export const story = {
   scenes: {
     sun: {
       title: "A living star",
-      body: "Placeholder: our sun holds a small family of worlds. Orbits here are simple shapes — swap in your own myth later.",
+      body: "Placeholder: six worlds with moons and tiny craft in orbit. Rewrite this line with your own system myth.",
     },
     nebula: {
       title: "Painted gas",
@@ -58,8 +58,8 @@ export const scrollStops = {
 export const particles = {
   starfieldDesktop: 4200,
   starfieldMobile: 1600,
-  nebulaDesktop: 2200,
-  nebulaMobile: 900,
-  galaxyDesktop: 5000,
-  galaxyMobile: 2000,
+  nebulaDesktop: 2400,
+  nebulaMobile: 1000,
+  galaxyDesktop: 7000,
+  galaxyMobile: 2800,
 };

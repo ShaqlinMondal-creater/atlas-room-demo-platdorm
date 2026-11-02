@@ -7,10 +7,11 @@ import { lerpVec3, segment } from "./math.js";
 
 var WAYPOINTS = [
   { at: scrollStops.start, pos: { x: 0, y: 0, z: 28 }, look: { x: 0, y: 0, z: -20 } },
-  { at: scrollStops.sun, pos: { x: 0, y: 6, z: -8 }, look: { x: 0, y: 0, z: -40 } },
-  { at: scrollStops.nebula, pos: { x: 6, y: 3, z: -72 }, look: { x: 18, y: 4, z: -95 } },
-  { at: scrollStops.galaxy, pos: { x: 0, y: 18, z: -130 }, look: { x: 0, y: 0, z: -160 } },
-  { at: scrollStops.finale, pos: { x: 0, y: 10, z: -150 }, look: { x: 0, y: 0, z: -175 } },
+  // High enough to see the full system; close enough to read moons / sats
+  { at: scrollStops.sun, pos: { x: 0, y: 11, z: 2 }, look: { x: 0, y: -1, z: -40 } },
+  { at: scrollStops.nebula, pos: { x: 8, y: 4, z: -74 }, look: { x: 22, y: 6, z: -98 } },
+  { at: scrollStops.galaxy, pos: { x: 2, y: 42, z: -145 }, look: { x: 0, y: 0, z: -165 } },
+  { at: scrollStops.finale, pos: { x: 0, y: 24, z: -152 }, look: { x: 0, y: 0, z: -168 } },
 ];
 
 /**

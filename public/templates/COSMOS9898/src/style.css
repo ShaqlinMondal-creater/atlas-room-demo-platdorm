@@ -66,6 +66,7 @@ body {
 
 .hud.is-fading {
   opacity: 0;
+  visibility: hidden;
 }
 
 .hud__eyebrow {

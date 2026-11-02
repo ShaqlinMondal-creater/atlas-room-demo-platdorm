@@ -1,7 +1,12 @@
 /*
   Universe Cosmos — full scroll voyage (Scenes 1–4 + finale).
+  Soft sprites + selective bloom for a brighter, more realistic glow.
 */
 import * as THREE from "three";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { story } from "./config.js";
 import { createAmbientToggle } from "./audio/ambient.js";
 import { createStarfield } from "./scenes/starfield.js";
@@ -11,7 +16,7 @@ import { createGalaxy } from "./scenes/galaxy.js";
 import { bindCaptions, fillFinaleCopy } from "./ui/captions.js";
 import { sampleCameraPath } from "./utils/cameraPath.js";
 import { cappedPixelRatio } from "./utils/device.js";
-import { segment } from "./utils/math.js";
+import { lerp, segment } from "./utils/math.js";
 import { prefersReducedMotion } from "./utils/motion.js";
 import { canUseWebGL } from "./utils/webgl.js";
 
@@ -59,11 +64,13 @@ setProgress(12, "Creating the night sky…");
 
 var reducedMotion = prefersReducedMotion();
 var scene = new THREE.Scene();
-scene.background = new THREE.Color(0x05070f);
-scene.fog = new THREE.FogExp2(0x05070f, 0.0038);
+// Match page CSS void so bloom / composer never flash a black strip
+var voidColor = new THREE.Color(0x05070f);
+scene.background = voidColor;
+scene.fog = new THREE.FogExp2(0x05070f, 0.0028);
 
 var camera = new THREE.PerspectiveCamera(
-  55,
+  58,
   window.innerWidth / window.innerHeight,
   0.1,
   500
@@ -78,6 +85,11 @@ var renderer = new THREE.WebGLRenderer({
 });
 renderer.setPixelRatio(cappedPixelRatio());
 renderer.setSize(window.innerWidth, window.innerHeight, false);
+renderer.setClearColor(voidColor, 1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.95;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.autoClear = true;
 
 setProgress(28, "Placing the stars…");
 var starfield = createStarfield({ reducedMotion: reducedMotion });
@@ -99,6 +111,20 @@ setProgress(90, "Warming the engines…");
 
 var updateCaptions = bindCaptions();
 
+/* Bloom — soft glow; strength rises near the galaxy */
+var composer = new EffectComposer(renderer);
+composer.setPixelRatio(renderer.getPixelRatio());
+composer.setSize(window.innerWidth, window.innerHeight);
+composer.addPass(new RenderPass(scene, camera));
+var bloomPass = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  0.55,
+  0.55,
+  0.18
+);
+composer.addPass(bloomPass);
+composer.addPass(new OutputPass());
+
 var pointer = { x: 0, y: 0, tx: 0, ty: 0 };
 
 function onPointerMove(event) {
@@ -118,10 +144,15 @@ function scrollProgress() {
 }
 
 function onResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  var w = window.innerWidth;
+  var h = window.innerHeight;
+  camera.aspect = w / h;
   camera.updateProjectionMatrix();
   renderer.setPixelRatio(cappedPixelRatio());
-  renderer.setSize(window.innerWidth, window.innerHeight, false);
+  renderer.setSize(w, h, false);
+  composer.setPixelRatio(renderer.getPixelRatio());
+  composer.setSize(w, h);
+  bloomPass.resolution.set(w, h);
 }
 
 window.addEventListener("resize", onResize);
@@ -155,27 +186,29 @@ function tick() {
 
   updateCaptions(p);
 
-  // Soft visibility windows so scenes do not pile into one blob
-  var sunVis = Math.min(segment(0.08, 0.18, p), 1 - segment(0.34, 0.44, p));
-  var nebVis = Math.min(segment(0.34, 0.44, p), 1 - segment(0.58, 0.68, p));
-  var galVis = Math.min(segment(0.58, 0.68, p), 1 - segment(0.86, 0.96, p));
+  // Soft hand-off — keep solar on longer so the system never pops to empty black
+  var sunVis = Math.min(segment(0.05, 0.14, p), 1 - segment(0.34, 0.42, p));
+  var nebVis = Math.min(segment(0.36, 0.44, p), 1 - segment(0.58, 0.66, p));
+  var galVis = Math.min(segment(0.6, 0.68, p), 1 - segment(0.86, 0.96, p));
 
   solar.object.visible = sunVis > 0.02;
-  if (nebula.object.material) {
-    nebula.object.material.opacity = 0.5 * nebVis;
-    nebula.object.visible = nebVis > 0.02;
-  }
-  if (galaxy.object.material) {
-    galaxy.object.material.opacity = 0.85 * galVis;
-    galaxy.object.visible = galVis > 0.02;
-  }
+  nebula.setVisibility(nebVis);
+  galaxy.setVisibility(galVis);
+
+  // Glow rises at the galaxy; threshold keeps arm colour visible
+  var bloomStrength = lerp(0.38, 0.78, galVis);
+  bloomStrength = Math.max(bloomStrength, lerp(0.38, 0.65, sunVis * 0.9));
+  bloomStrength = Math.max(bloomStrength, lerp(0.38, 0.7, nebVis * 0.75));
+  bloomPass.strength = reducedMotion ? bloomStrength * 0.55 : bloomStrength;
+  bloomPass.radius = galVis > 0.35 ? 0.55 : 0.45;
+  bloomPass.threshold = galVis > 0.4 ? 0.28 : 0.32;
 
   starfield.update(t);
   solar.update(t);
   nebula.update(t);
   galaxy.update(t);
 
-  renderer.render(scene, camera);
+  composer.render();
   requestAnimationFrame(tick);
 }
 
@@ -196,6 +229,7 @@ window.__cosmos = {
   scene: scene,
   camera: camera,
   renderer: renderer,
+  composer: composer,
   starfield: starfield,
   solar: solar,
   nebula: nebula,
@@ -207,6 +241,7 @@ window.__cosmos = {
     nebula.dispose();
     galaxy.dispose();
     ambient.dispose();
+    composer.dispose();
     renderer.dispose();
   },
 };

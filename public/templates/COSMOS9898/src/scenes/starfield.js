@@ -9,6 +9,7 @@
 import * as THREE from "three";
 import { particles } from "../config.js";
 import { isMobile } from "../utils/device.js";
+import { softSpriteTexture } from "../utils/softSprite.js";
 
 /**
  * Build the starfield and return it so main.js can add / dispose it later.
@@ -63,11 +64,12 @@ export function createStarfield(options) {
   geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
   var material = new THREE.PointsMaterial({
-    size: isMobile() ? 0.45 : 0.55,
+    size: isMobile() ? 0.5 : 0.65,
+    map: softSpriteTexture(64),
     sizeAttenuation: true,
     vertexColors: true,
     transparent: true,
-    opacity: 0.88,
+    opacity: 0.9,
     depthWrite: false,
     blending: THREE.AdditiveBlending,
   });
