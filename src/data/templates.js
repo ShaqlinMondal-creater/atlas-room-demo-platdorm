@@ -23,6 +23,25 @@ export const templates = [
     },
   },
   {
+    code: "COSMOS9898",
+    name: "Universe Cosmos",
+    category: "3D experience",
+    stack: "HTML · CSS · JS · three.js",
+    summary:
+      "Scroll-driven voyage through a starfield (more scenes coming): loading screen, WebGL fallback, and reduced-motion support.",
+    previewPath: "/templates/COSMOS9898/index.html",
+    thumbnail: "/thumbnails/COSMOS9898.svg",
+    available: true,
+    status: "scene 1 ready",
+    tags: ["Three.js", "Space", "Scroll"],
+    theme: {
+      accent: "#7eb6ff",
+      soft: "#121826",
+      label: "Void blue · System UI",
+    },
+  },
+
+  {
     code: "FORM2201",
     name: "Pulse Intake",
     category: "Lead form",

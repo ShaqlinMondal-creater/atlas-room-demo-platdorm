@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Universe Cosmos</title>
+  <meta name="description" content="Universe Cosmos — a scroll-through space showcase built with three.js.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%2305070f'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%237eb6ff'/%3E%3C/svg%3E">
+  <style>html.gate-lock body{visibility:hidden}</style>
+  <script src="/access-gate.js"></script>
+  <link rel="stylesheet" href="./src/style.css">
+  <!--
+    Import map: lets bare "three" imports work without a bundler.
+    Pin the version so demos stay stable.
+  -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="loader" id="loader" role="status" aria-live="polite">
+    <div class="loader__card">
+      <p class="loader__label" id="loader-label">Preparing your voyage…</p>
+      <div class="loader__track" aria-hidden="true">
+        <div class="loader__bar" id="loader-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fallback" id="fallback" hidden>
+    <div>
+      <h1 id="no-webgl-title">3D view unavailable</h1>
+      <p id="no-webgl-body"></p>
+      <p><a href="/">Back to Atlas Room</a></p>
+    </div>
+  </div>
+
+  <canvas id="webgl" aria-hidden="true"></canvas>
+
+  <div class="hud" id="hud">
+    <div>
+      <p class="hud__eyebrow" id="start-brand">Universe Cosmos</p>
+      <h1 class="hud__title" id="start-title">Universe Cosmos</h1>
+      <p class="hud__lede" id="start-lede"></p>
+      <p class="hud__hint" id="scroll-hint">Scroll to begin<span>↓</span></p>
+      <p class="hud__lede" id="motion-note" hidden style="margin-top:18px;font-size:0.86rem"></p>
+    </div>
+  </div>
+
+  <!-- Invisible tall page: scrolling drives the camera -->
+  <div class="scroll-track" aria-hidden="true"></div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

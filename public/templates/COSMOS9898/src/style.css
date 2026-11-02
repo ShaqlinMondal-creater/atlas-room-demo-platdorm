@@ -1,0 +1,198 @@
+/*
+  Universe Cosmos — Scene 1 shell styles.
+  Dark space UI · system fonts for zero extra download.
+*/
+
+:root {
+  --ink: #e8eef8;
+  --muted: #9aa8c0;
+  --void: #05070f;
+  --glow: #7eb6ff;
+  --line: rgba(126, 182, 255, 0.22);
+  --font: "Segoe UI", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--void);
+  color: var(--ink);
+  font-family: var(--font);
+}
+
+body {
+  overflow-x: hidden;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+#webgl {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.scroll-track {
+  position: relative;
+  z-index: 1;
+  /* Tall page so the visitor can scroll — more height added with later scenes */
+  height: 220vh;
+  pointer-events: none;
+}
+
+.hud {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(40, 70, 130, 0.28), transparent 55%),
+    linear-gradient(180deg, rgba(5, 7, 15, 0.15), rgba(5, 7, 15, 0.55));
+  transition: opacity 0.45s ease;
+}
+
+.hud.is-fading {
+  opacity: 0;
+}
+
+.hud__eyebrow {
+  margin: 0 0 10px;
+  color: var(--glow);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.hud__title {
+  margin: 0;
+  font-size: clamp(2.4rem, 8vw, 4.2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  text-shadow: 0 0 40px rgba(126, 182, 255, 0.35);
+}
+
+.hud__lede {
+  margin: 14px auto 0;
+  max-width: 38ch;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+
+.hud__hint {
+  margin: 28px 0 0;
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  animation: pulse 2.2s ease-in-out infinite;
+}
+
+.hud__hint span {
+  display: inline-block;
+  margin-top: 8px;
+  opacity: 0.7;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hud__hint {
+    animation: none;
+  }
+}
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: var(--void);
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.loader.is-done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader__card {
+  width: min(320px, calc(100% - 40px));
+  text-align: center;
+}
+
+.loader__label {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.loader__track {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.loader__bar {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #3d6fd6, var(--glow));
+  transition: width 0.2s ease;
+}
+
+.fallback {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  background: var(--void);
+}
+
+.fallback h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.fallback p {
+  margin: 12px auto 0;
+  max-width: 36ch;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.fallback a {
+  color: var(--glow);
+}

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Universe Cosmos thumbnail">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#1a2a4a"/>
+      <stop offset="100%" stop-color="#05070f"/>
+    </radialGradient>
+  </defs>
+  <rect width="640" height="400" fill="url(#g)"/>
+  <circle cx="120" cy="80" r="1.5" fill="#cfe3ff" opacity="0.9"/>
+  <circle cx="200" cy="140" r="1" fill="#fff" opacity="0.7"/>
+  <circle cx="320" cy="60" r="1.2" fill="#9ec5ff" opacity="0.85"/>
+  <circle cx="480" cy="110" r="1" fill="#fff" opacity="0.6"/>
+  <circle cx="540" cy="200" r="1.4" fill="#dce9ff" opacity="0.8"/>
+  <circle cx="90" cy="240" r="1" fill="#fff" opacity="0.5"/>
+  <circle cx="400" cy="280" r="1.2" fill="#a8c7ff" opacity="0.75"/>
+  <circle cx="560" cy="320" r="1" fill="#fff" opacity="0.55"/>
+  <circle cx="260" cy="200" r="28" fill="#7eb6ff" opacity="0.25"/>
+  <circle cx="260" cy="200" r="10" fill="#e8f2ff"/>
+  <text x="40" y="360" fill="#9aa8c0" font-family="Segoe UI, sans-serif" font-size="22" font-weight="700">Universe Cosmos</text>
+</svg>
