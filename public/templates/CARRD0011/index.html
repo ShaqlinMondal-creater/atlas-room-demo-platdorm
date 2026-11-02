@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>QuickLoan Demo | Personal, Business & Home loans</title>
-  <meta name="description" content="Fictional QuickLoan Demo landing page for a portfolio showcase. Not a real loan offer.">
+  <title>QuickLoan | Personal, Business & Home loans</title>
+  <meta name="description" content="QuickLoan — check Personal, Business or Home loan eligibility and plan your EMI.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%233A47C9'/%3E%3C/svg%3E">
   <style>html.gate-lock body{visibility:hidden}</style>
   <script src="/access-gate.js"></script>
@@ -21,7 +21,7 @@
     <div class="wrap header-inner">
       <a class="brand" href="#top">
         <span class="brand__mark" aria-hidden="true">QL</span>
-        <span id="brand-name">QuickLoan Demo</span>
+        <span id="brand-name">QuickLoan</span>
       </a>
       <nav class="header-nav" aria-label="Page">
         <a href="#apply">Apply</a>
@@ -40,7 +40,7 @@
       <div class="wrap hero-apply-grid">
         <div class="hero-copy reveal-soft">
           <p class="eyebrow" id="hero-eyebrow">Loans for India · fast enquiry</p>
-          <h1 id="hero-title">Get a clear loan offer path in two short steps</h1>
+          <h1 id="hero-title">Get a clear loan offer path in a few short steps</h1>
           <p class="hero__value" id="hero-value">
             Choose Personal, Business or Home. Share a few details. See your EMI instantly.
           </p>
@@ -48,14 +48,20 @@
           <ul class="hero-checks">
             <li>No branch visit for the first check</li>
             <li>EMI updates as you move the sliders</li>
-            <li>Same enquiry continues from step 1 to step 2</li>
+            <li>Mobile verified before product details</li>
           </ul>
 
           <ul class="stat-row" id="stat-row"></ul>
 
           <div class="hero-proof">
             <div class="hero-proof-faces" id="hero-faces" aria-hidden="true"></div>
-            <p><strong>2,400+</strong> sample enquiries started this month on this demo flow.</p>
+            <p id="hero-proof-copy">2,400+ enquiries started this month.</p>
+          </div>
+
+          <div class="trust-strip" aria-label="Lending partners">
+            <p class="trust-strip-label">Trusted with</p>
+            <ul class="partner-row" id="partner-row"></ul>
+            <p class="trust-rating"><strong>4.8</strong> · based on recent enquiries</p>
           </div>
         </div>
 
@@ -67,7 +73,8 @@
             </div>
             <ol class="form-progress" id="form-progress" aria-label="Enquiry progress">
               <li class="is-active" data-progress="1"><strong>1</strong><span>Contact</span></li>
-              <li data-progress="2"><strong>2</strong><span>Details</span></li>
+              <li data-progress="2"><strong>2</strong><span>Verify</span></li>
+              <li data-progress="3"><strong>3</strong><span>Details</span></li>
             </ol>
           </div>
 
@@ -93,6 +100,7 @@
                 <div class="field">
                   <label for="mobile">Mobile number</label>
                   <input id="mobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel" maxlength="10" placeholder="9876501234">
+                  <p class="field-hint">10-digit Indian mobile · starts with 6–9</p>
                   <p class="field-error" id="mobile-error" hidden></p>
                 </div>
               </div>
@@ -100,6 +108,7 @@
               <div class="field">
                 <label for="loan-amount">Required loan amount (₹)</label>
                 <input id="loan-amount" name="loan_amount" type="number" inputmode="numeric" min="1" step="1" placeholder="450000">
+                <div class="amount-picks" id="amount-picks" role="group" aria-label="Quick amount picks"></div>
                 <p class="field-error" id="loan-amount-error" hidden></p>
               </div>
 
@@ -108,12 +117,36 @@
                   <input id="consent" name="consent" type="checkbox" value="yes">
                   <label for="consent">I agree to be contacted about this loan enquiry.</label>
                 </div>
-                <p class="fine-print"><a href="#privacy">Privacy policy</a></p>
+                <p class="fine-print"><a href="#legal" data-legal="privacy">Privacy policy</a></p>
                 <p class="field-error" id="consent-error" hidden></p>
               </div>
 
               <div class="form-actions">
                 <button type="button" class="btn btn-primary btn-block" id="next-btn">Continue</button>
+              </div>
+            </div>
+
+            <div id="step-otp" class="step-shell" hidden>
+              <p class="step-label" id="otp-label" tabindex="-1">Verify your mobile</p>
+              <p class="otp-lede" id="otp-lede">We sent a 6-digit code to your number.</p>
+
+              <div class="otp-row" role="group" aria-label="One-time password">
+                <input class="otp-digit" id="otp-0" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Digit 1">
+                <input class="otp-digit" id="otp-1" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 2">
+                <input class="otp-digit" id="otp-2" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 3">
+                <input class="otp-digit" id="otp-3" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 4">
+                <input class="otp-digit" id="otp-4" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 5">
+                <input class="otp-digit" id="otp-5" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 6">
+              </div>
+              <p class="field-error" id="otp-error" hidden></p>
+              <p class="otp-meta">
+                <button type="button" class="link-btn" id="otp-resend" disabled>Resend code</button>
+                <span id="otp-timer" aria-live="polite"></span>
+              </p>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-ghost" id="otp-back-btn">Back</button>
+                <button type="button" class="btn btn-primary" id="otp-verify-btn">Verify &amp; continue</button>
               </div>
             </div>
 
@@ -171,7 +204,7 @@
               </div>
             </div>
 
-            <p class="preview-note" id="layout-note">Your details stay on this page for the demo. Nothing is sent to a real lender.</p>
+            <p class="preview-note" id="layout-note">We use your details only to contact you about this enquiry.</p>
             <div class="success" id="form-success" role="status" hidden></div>
           </form>
         </div>
@@ -285,7 +318,7 @@
         <div class="section-head center">
           <p class="eyebrow">Customer stories</p>
           <h2 id="trust-title">People who started with a short enquiry</h2>
-          <p id="trust-lede">Fictional quotes for this showcase — written to feel like a finished product page.</p>
+          <p id="trust-lede">Recent customers share how the first check felt on their phone.</p>
         </div>
         <ul class="story-grid" id="logo-row"></ul>
       </div>
@@ -299,10 +332,10 @@
         </div>
         <ul class="trust-points">
           <li><strong>Clear product choice</strong> Personal, Business and Home stay separate so step 2 asks only what that loan needs.</li>
-          <li><strong>Partial then complete</strong> Mobile and amount are captured early, even if step 2 is left unfinished.</li>
+          <li><strong>Partial then complete</strong> Mobile and amount are captured early, even if details are left unfinished.</li>
           <li><strong>Consent first</strong> The contact checkbox is required before an enquiry id is created.</li>
         </ul>
-        <p class="fine-print" id="privacy">Demo only. Nothing is sent to a real lender. A connected version would store details only to contact you about this enquiry.</p>
+        <p class="fine-print">We store enquiry details only to contact you about this request. Read our <a href="#legal" data-legal="privacy">Privacy policy</a> and <a href="#legal" data-legal="terms">Terms</a>.</p>
       </div>
     </section>
   </main>
@@ -312,28 +345,74 @@
       <div>
         <a class="brand" href="#top">
           <span class="brand__mark" aria-hidden="true">QL</span>
-          <span>QuickLoan Demo</span>
+          <span id="footer-brand">QuickLoan</span>
         </a>
-        <p class="demo-note" id="demo-note">Demo page. Not a real loan offer.</p>
+        <p class="footer-meta">Personal · Business · Home loans</p>
       </div>
-      <div>
+      <div class="footer-links">
         <p>Call <a id="footer-call" href="tel:+919000011223">90000 11223</a></p>
-        <p><a href="/">Back to Atlas Room</a></p>
+        <p>
+          <a href="#legal" data-legal="privacy">Privacy</a>
+          <span aria-hidden="true"> · </span>
+          <a href="#legal" data-legal="terms">Terms</a>
+          <span aria-hidden="true"> · </span>
+          <a href="#apply">Apply</a>
+        </p>
       </div>
+    </div>
+    <div class="wrap">
+      <p class="demo-note" id="demo-note">Portfolio showcase sample. Not a live loan offer.</p>
     </div>
   </footer>
 
-  <div class="call-bar">
-    <span class="call-bar__note" id="call-note">90000 11223</span>
-    <a class="call-bar__btn" id="call-now" href="tel:+919000011223">Call Now</a>
+  <div class="call-bar" id="call-bar">
+    <div class="call-bar__copy">
+      <span class="call-bar__label">Talk to an advisor</span>
+      <span class="call-bar__note" id="call-note">90000 11223</span>
+    </div>
+    <a class="call-bar__btn" id="call-now" href="tel:+919000011223">Call</a>
   </div>
 
-  <a class="wa-btn" id="wa-btn" href="https://wa.me/919000011223" target="_blank" rel="noopener noreferrer">
+  <a class="wa-btn" id="wa-btn" href="https://wa.me/919000011223" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
     <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
       <path fill="currentColor" d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-4 3v-3H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"></path>
     </svg>
     <span class="wa-btn__label">WhatsApp</span>
   </a>
+
+  <div class="legal-modal" id="legal-modal" hidden>
+    <div class="legal-modal__backdrop" data-legal-close></div>
+    <div class="legal-modal__panel" role="dialog" aria-modal="true" aria-labelledby="legal-title">
+      <div class="legal-modal__head">
+        <h2 id="legal-title">Legal</h2>
+        <button type="button" class="legal-modal__close" data-legal-close aria-label="Close">×</button>
+      </div>
+      <div class="legal-tabs" role="tablist" aria-label="Legal documents">
+        <button type="button" class="legal-tab is-active" role="tab" aria-selected="true" data-legal-tab="privacy">Privacy</button>
+        <button type="button" class="legal-tab" role="tab" aria-selected="false" data-legal-tab="terms">Terms</button>
+      </div>
+      <div class="legal-body" id="legal-privacy" role="tabpanel">
+        <p>QuickLoan uses the details you share on this page only to contact you about your loan enquiry and related eligibility checks.</p>
+        <ul>
+          <li>We collect name, mobile number, loan amount, and product-specific income or business fields.</li>
+          <li>OTP verification confirms the mobile number you entered. We do not ask for banking passwords on this page.</li>
+          <li>Enquiry records may be shared with lending partners solely to process your request.</li>
+          <li>You can ask us to stop contact on the number you provided. Call the number listed on this page.</li>
+        </ul>
+        <p class="legal-note">This is sample policy copy for a portfolio showcase. It is not a live lender privacy notice.</p>
+      </div>
+      <div class="legal-body" id="legal-terms" role="tabpanel" hidden>
+        <p>By submitting an enquiry you ask QuickLoan to review your details and call you about Personal, Business, or Home loan options.</p>
+        <ul>
+          <li>Submitting an enquiry does not guarantee loan approval, rate, or disbursal.</li>
+          <li>EMI figures on this page are illustrative estimates and may differ from a final offer.</li>
+          <li>You confirm the information you enter is accurate to the best of your knowledge.</li>
+          <li>Partner banks and NBFCs apply their own credit, KYC, and documentation rules.</li>
+        </ul>
+        <p class="legal-note">This is sample terms copy for a portfolio showcase. It is not a live lending agreement.</p>
+      </div>
+    </div>
+  </div>
 
   <script src="demo-config.js"></script>
   <script src="page.js"></script>

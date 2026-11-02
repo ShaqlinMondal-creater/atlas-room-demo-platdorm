@@ -22,9 +22,11 @@
   text("emi-lede", copy.emiLede);
   text("trust-title", copy.trustTitle);
   text("trust-lede", copy.trustLede);
-  text("privacy", copy.privacy);
   text("demo-note", copy.demoNote);
-  text("brand-name", brand.name || "QuickLoan Demo");
+  text("hero-proof-copy", copy.heroProof);
+  text("layout-note", copy.formNote);
+  text("brand-name", brand.name || "QuickLoan");
+  text("footer-brand", brand.name || "QuickLoan");
 
   function wirePhone(id, display) {
     var el = document.getElementById(id);
@@ -80,6 +82,52 @@
         );
       })
       .join("");
+  }
+
+  var partnerRow = document.getElementById("partner-row");
+  if (partnerRow && Array.isArray(cfg.partners)) {
+    partnerRow.innerHTML = cfg.partners
+      .map(function (item) {
+        return '<li class="partner-pill">' + (item.label || "Partner") + "</li>";
+      })
+      .join("");
+  }
+
+  function formatAmountLabel(value) {
+    var n = Number(value) || 0;
+    if (n >= 10000000) return "₹" + n / 10000000 + "Cr";
+    if (n >= 100000) {
+      var lakhs = n / 100000;
+      return "₹" + (Number.isInteger(lakhs) ? lakhs : lakhs.toFixed(1)) + "L";
+    }
+    return "₹" + n.toLocaleString("en-IN");
+  }
+
+  var amountPicks = document.getElementById("amount-picks");
+  var loanAmount = document.getElementById("loan-amount");
+  if (amountPicks && loanAmount && Array.isArray(cfg.amountPicks)) {
+    amountPicks.innerHTML = cfg.amountPicks
+      .map(function (value) {
+        return (
+          '<button type="button" class="amount-chip" data-amount="' +
+          value +
+          '">' +
+          formatAmountLabel(value) +
+          "</button>"
+        );
+      })
+      .join("");
+
+    amountPicks.addEventListener("click", function (event) {
+      var chip = event.target.closest(".amount-chip");
+      if (!chip) return;
+      var value = chip.getAttribute("data-amount");
+      loanAmount.value = value;
+      amountPicks.querySelectorAll(".amount-chip").forEach(function (item) {
+        item.classList.toggle("is-active", item === chip);
+      });
+      loanAmount.dispatchEvent(new Event("input", { bubbles: true }));
+    });
   }
 
   var stories = document.getElementById("logo-row");
@@ -163,4 +211,61 @@
   }
 
   revealSoft();
+
+  /* Privacy / Terms modal */
+  var legalModal = document.getElementById("legal-modal");
+  var legalPrivacy = document.getElementById("legal-privacy");
+  var legalTerms = document.getElementById("legal-terms");
+  var legalTitle = document.getElementById("legal-title");
+  var lastLegalFocus = null;
+
+  function showLegalPanel(which) {
+    var privacy = which !== "terms";
+    if (legalPrivacy) legalPrivacy.hidden = !privacy;
+    if (legalTerms) legalTerms.hidden = privacy;
+    if (legalTitle) legalTitle.textContent = privacy ? "Privacy policy" : "Terms of use";
+    document.querySelectorAll("[data-legal-tab]").forEach(function (tab) {
+      var on = tab.getAttribute("data-legal-tab") === (privacy ? "privacy" : "terms");
+      tab.classList.toggle("is-active", on);
+      tab.setAttribute("aria-selected", on ? "true" : "false");
+    });
+  }
+
+  function openLegal(which) {
+    if (!legalModal) return;
+    lastLegalFocus = document.activeElement;
+    showLegalPanel(which || "privacy");
+    legalModal.hidden = false;
+    document.body.classList.add("legal-open");
+    var closeBtn = legalModal.querySelector(".legal-modal__close");
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeLegal() {
+    if (!legalModal || legalModal.hidden) return;
+    legalModal.hidden = true;
+    document.body.classList.remove("legal-open");
+    if (lastLegalFocus && lastLegalFocus.focus) lastLegalFocus.focus();
+  }
+
+  document.querySelectorAll("[data-legal]").forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      event.preventDefault();
+      openLegal(link.getAttribute("data-legal"));
+    });
+  });
+
+  document.querySelectorAll("[data-legal-close]").forEach(function (el) {
+    el.addEventListener("click", closeLegal);
+  });
+
+  document.querySelectorAll("[data-legal-tab]").forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      showLegalPanel(tab.getAttribute("data-legal-tab"));
+    });
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") closeLegal();
+  });
 })();
