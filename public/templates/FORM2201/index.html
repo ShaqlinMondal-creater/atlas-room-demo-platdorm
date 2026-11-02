@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Pulse Intake | Warm multi-step form</title>
+  <meta name="description" content="Fictional Pulse Intake multi-step form for a portfolio showcase.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23C45C26'/%3E%3C/svg%3E">
+  <style>html.gate-lock body{visibility:hidden}</style>
+  <script src="/access-gate.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#intake">Skip to the form</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="#top">
+        <span class="brand__mark" aria-hidden="true">PI</span>
+        <span id="brand-name">Pulse Intake</span>
+      </a>
+      <a class="samples-link" href="/">All templates</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap">
+        <p class="eyebrow" id="hero-eyebrow">Warm desk sample</p>
+        <h1 id="hero-title">Share the brief in three calm steps</h1>
+        <p class="hero__value" id="hero-value">Contact, project shape, and timing. Demo only — nothing leaves this page.</p>
+        <ol class="progress" id="progress" aria-label="Form progress"></ol>
+      </div>
+    </section>
+
+    <section class="section" id="intake" aria-labelledby="form-title">
+      <div class="wrap">
+        <form class="card" id="intake-form" novalidate>
+          <h2 id="form-title">Start an intake</h2>
+
+          <div class="step-panel" data-step="0">
+            <p class="step-label">Step 1 of 3 · Contact</p>
+            <div class="field">
+              <label for="full-name">Full name</label>
+              <input id="full-name" name="full_name" type="text" autocomplete="name" placeholder="Asha Menon">
+              <p class="field-error" id="full-name-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="email">Work email</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="asha@studioexample.com">
+              <p class="field-error" id="email-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="company">Studio or company</label>
+              <input id="company" name="company" type="text" autocomplete="organization" placeholder="North Clay Studio">
+              <p class="field-error" id="company-error" hidden></p>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn" data-next>Continue</button>
+            </div>
+          </div>
+
+          <div class="step-panel" data-step="1" hidden>
+            <p class="step-label">Step 2 of 3 · Project</p>
+            <p class="step-label" style="margin-top:8px">What are you shaping?</p>
+            <div class="choice-grid" id="project-types" role="group" aria-label="Project type"></div>
+            <input type="hidden" name="project_type" id="project-type" value="">
+            <p class="field-error" id="project-type-error" hidden></p>
+
+            <p class="step-label">Rough budget</p>
+            <div class="choice-grid" id="budgets" role="group" aria-label="Budget"></div>
+            <input type="hidden" name="budget" id="budget" value="">
+            <p class="field-error" id="budget-error" hidden></p>
+
+            <div class="actions">
+              <button type="button" class="btn ghost" data-back>Back</button>
+              <button type="button" class="btn" data-next>Continue</button>
+            </div>
+          </div>
+
+          <div class="step-panel" data-step="2" hidden>
+            <p class="step-label">Step 3 of 3 · Timing</p>
+            <p class="step-label" style="margin-top:8px">When should this land?</p>
+            <div class="choice-grid" id="timelines" role="group" aria-label="Timeline"></div>
+            <input type="hidden" name="timeline" id="timeline" value="">
+            <p class="field-error" id="timeline-error" hidden></p>
+
+            <div class="field">
+              <label for="notes">Anything else?</label>
+              <textarea id="notes" name="notes" placeholder="Need a calm lead form and a short case-study strip."></textarea>
+            </div>
+
+            <div class="actions">
+              <button type="button" class="btn ghost" data-back>Back</button>
+              <button type="submit" class="btn">Save demo brief</button>
+            </div>
+          </div>
+
+          <div class="step-panel success" data-step="done" hidden>
+            <h2 id="success-title">Brief captured</h2>
+            <p id="success-body">Demo saved locally for this session.</p>
+            <dl class="summary" id="summary"></dl>
+            <div class="actions" style="justify-content:center">
+              <button type="button" class="btn ghost" id="reset-form">Start another</button>
+            </div>
+          </div>
+        </form>
+
+        <p class="site-footer" style="border:0;padding:16px 4px 0">
+          <span id="privacy">Portfolio sample. Fields stay on this page unless you connect a real endpoint later.</span>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Pulse Intake · demo template</p>
+    </div>
+  </footer>
+
+  <script src="demo-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
