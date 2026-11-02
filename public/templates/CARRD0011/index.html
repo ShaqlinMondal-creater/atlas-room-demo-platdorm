@@ -11,11 +11,11 @@
   <script src="/access-gate.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a class="skip" href="#apply">Skip to apply</a>
+  <a class="skip" href="#emi">Skip to EMI</a>
 
   <header class="site-header">
     <div class="wrap header-inner">
@@ -24,13 +24,14 @@
         <span id="brand-name">QuickLoan</span>
       </a>
       <nav class="header-nav" aria-label="Page">
-        <a href="#apply">Apply</a>
+        <a href="#apply" data-open-apply>Apply</a>
         <a href="#emi">EMI</a>
+        <a href="#benefits">Benefits</a>
         <a href="#stories">Customers</a>
       </nav>
       <div class="header-actions">
         <a class="header-phone" id="header-call" href="tel:+919000011223">90000 11223</a>
-        <a class="btn btn-primary btn-sm" href="#apply">Check eligibility</a>
+        <button type="button" class="btn btn-primary btn-sm" data-open-apply>Check eligibility</button>
       </div>
     </div>
   </header>
@@ -45,91 +46,138 @@
             Choose Personal, Business or Home. Share a few details. See your EMI instantly.
           </p>
 
-          <ul class="hero-checks">
-            <li>No branch visit for the first check</li>
-            <li>EMI updates as you move the sliders</li>
-            <li>Mobile verified before product details</li>
-          </ul>
+          <ul class="hero-checks" id="hero-features"></ul>
 
-          <ul class="stat-row" id="stat-row"></ul>
+          <div class="hero-cta-row">
+            <button type="button" class="btn btn-primary" data-open-apply>Apply Now</button>
+            <a class="btn btn-ghost" href="#emi">See EMI first</a>
+          </div>
 
           <div class="hero-proof">
             <div class="hero-proof-faces" id="hero-faces" aria-hidden="true"></div>
             <p id="hero-proof-copy">2,400+ enquiries started this month.</p>
-          </div>
-
-          <div class="trust-strip" aria-label="Lending partners">
-            <p class="trust-strip-label">Trusted with</p>
-            <ul class="partner-row" id="partner-row"></ul>
-            <p class="trust-rating"><strong>4.8</strong> · based on recent enquiries</p>
+            <p class="hero-proof-rate"><strong>4.8</strong> from recent enquiries</p>
           </div>
         </div>
 
-        <div class="apply-card reveal-soft" id="apply">
-          <div class="apply-card-head">
+        <div class="emi-card reveal-soft" id="emi">
+          <div class="emi-card-head">
+            <p class="emi-card-kicker">Plan your EMI</p>
+            <h2 id="emi-title">Personal Loan EMI Calculator</h2>
+            <p class="emi-card-lede" id="emi-lede">Live EMI · interest · total</p>
+          </div>
+
+          <div class="emi-row">
+            <div class="emi-row-top">
+              <label for="emi-amount">Loan amount</label>
+              <div class="emi-value-box">
+                <span class="emi-prefix">₹</span>
+                <input id="emi-amount" type="number" min="50000" max="1500000" step="1000" value="450000">
+              </div>
+            </div>
+            <input id="emi-amount-range" type="range" min="50000" max="1500000" step="1000" value="450000" aria-label="Loan amount slider">
+            <div class="emi-range-meta"><span>₹50K</span><span>₹15L</span></div>
+          </div>
+
+          <div class="emi-row">
+            <div class="emi-row-top">
+              <label for="emi-tenure">Loan term</label>
+              <div class="emi-value-box">
+                <input id="emi-tenure" type="number" min="1" max="60" step="1" value="48">
+                <span class="emi-suffix">mo</span>
+              </div>
+            </div>
+            <input id="emi-tenure-range" type="range" min="1" max="60" step="1" value="48" aria-label="Tenure in months">
+            <div class="emi-range-meta"><span>1 mo</span><span>60 mo</span></div>
+          </div>
+
+          <div class="emi-row">
+            <div class="emi-row-top">
+              <label for="emi-rate">Interest rate</label>
+              <div class="emi-value-box">
+                <input id="emi-rate" type="number" min="9.99" max="24" step="0.1" value="11.25">
+                <span class="emi-suffix">%</span>
+              </div>
+            </div>
+            <p class="emi-nudge emi-nudge--ok">Lowest rate band unlocked</p>
+            <input id="emi-rate-range" type="range" min="9.99" max="24" step="0.1" value="11.25" aria-label="Interest rate slider">
+            <div class="emi-range-meta"><span>9.99%</span><span>24%</span></div>
+          </div>
+
+          <div class="emi-board">
+            <p class="emi-board-line">Your EMI <strong id="emi-monthly">₹ 0</strong><span>/mo</span></p>
+            <dl class="emi-board-split">
+              <div>
+                <dt>Interest</dt>
+                <dd id="emi-interest">₹ 0</dd>
+              </div>
+              <div>
+                <dt>Total</dt>
+                <dd id="emi-total">₹ 0</dd>
+              </div>
+            </dl>
+            <button type="button" class="btn btn-on-dark btn-block" data-open-apply>Check eligibility →</button>
+            <p class="emi-disclaimer">Illustration only · final offer may differ</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="apply-modal" id="apply-modal" hidden>
+      <div class="apply-modal__backdrop" data-apply-close></div>
+      <div class="apply-modal__panel" role="dialog" aria-modal="true" aria-labelledby="form-title">
+        <div class="apply-modal__top">
+          <div class="apply-modal__head">
             <div>
               <p class="apply-kicker">Start here</p>
               <h2 id="form-title" tabindex="-1">Check eligibility</h2>
             </div>
-            <ol class="form-progress" id="form-progress" aria-label="Enquiry progress">
-              <li class="is-active" data-progress="1"><strong>1</strong><span>Contact</span></li>
-              <li data-progress="2"><strong>2</strong><span>Verify</span></li>
-              <li data-progress="3"><strong>3</strong><span>Details</span></li>
-            </ol>
+            <button type="button" class="apply-modal__close" data-apply-close aria-label="Close">×</button>
           </div>
+          <ol class="form-progress" id="form-progress" aria-label="Enquiry progress">
+            <li class="is-active" data-progress="1"><strong>1</strong><span>Mobile</span></li>
+            <li data-progress="2"><strong>2</strong><span>OTP</span></li>
+            <li data-progress="3"><strong>3</strong><span>Details</span></li>
+          </ol>
+        </div>
 
-          <p class="apply-lede" id="form-lede">Tell us the loan type, then finish only what that product needs.</p>
-
+        <div class="apply-modal__body">
+          <p class="apply-lede" id="form-lede">Pick a loan type, verify mobile, then finish the short form.</p>
           <form class="lead-form" id="lead-form" novalidate>
             <p class="visually-hidden" aria-live="polite">Selected loan: <strong id="selected-product">Personal Loan</strong></p>
             <input type="hidden" name="product" id="product-input" value="Personal Loan">
 
-            <div class="product-tabs" role="group" aria-label="Choose a loan type">
-              <button type="button" class="product-tab" data-product="Personal Loan" aria-pressed="true">Personal</button>
-              <button type="button" class="product-tab" data-product="Business Loan" aria-pressed="false">Business</button>
-              <button type="button" class="product-tab" data-product="Home Loan" aria-pressed="false">Home</button>
+            <div class="product-tabs" id="product-tabs" role="group" aria-label="Choose a loan type">
+              <button type="button" class="product-tab" data-product="Personal Loan" aria-pressed="true">
+                <span class="product-tab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-3.3 0-6 1.7-6 3.8V20h12v-2.2C18 15.7 15.3 14 12 14z"/></svg></span>
+                <span>Personal</span>
+              </button>
+              <button type="button" class="product-tab" data-product="Business Loan" aria-pressed="false">
+                <span class="product-tab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M4 7h16v2H4V7zm1 4h14a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a1 1 0 0 1 1-1zm7 2.2c-1.5 0-2.5.8-2.5 1.8S10.5 17 12 17s2.5-.8 2.5-1.8-.9-1.8-2.5-1.8zM3 4h18v2H3V4z"/></svg></span>
+                <span>Business</span>
+              </button>
+              <button type="button" class="product-tab" data-product="Home Loan" aria-pressed="false">
+                <span class="product-tab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 3 3 10h2v9h5v-5h4v5h5v-9h2L12 3z"/></svg></span>
+                <span>Home</span>
+              </button>
             </div>
+            <p class="product-chip" id="product-chip" hidden>Personal Loan</p>
 
             <div id="step-1" class="step-shell">
-              <div class="field-grid">
-                <div class="field">
-                  <label for="full-name">Full name</label>
-                  <input id="full-name" name="full_name" type="text" autocomplete="name" placeholder="Riya Kapoor">
-                  <p class="field-error" id="full-name-error" hidden></p>
-                </div>
-                <div class="field">
-                  <label for="mobile">Mobile number</label>
-                  <input id="mobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel" maxlength="10" placeholder="9876501234">
-                  <p class="field-hint">10-digit Indian mobile · starts with 6–9</p>
-                  <p class="field-error" id="mobile-error" hidden></p>
-                </div>
-              </div>
-
               <div class="field">
-                <label for="loan-amount">Required loan amount (₹)</label>
-                <input id="loan-amount" name="loan_amount" type="number" inputmode="numeric" min="1" step="1" placeholder="450000">
-                <div class="amount-picks" id="amount-picks" role="group" aria-label="Quick amount picks"></div>
-                <p class="field-error" id="loan-amount-error" hidden></p>
+                <label for="mobile">Mobile number</label>
+                <input id="mobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel" maxlength="10" placeholder="9876501234">
+                <p class="field-hint">10-digit Indian mobile · starts with 6–9</p>
+                <p class="field-error" id="mobile-error" hidden></p>
               </div>
-
-              <div class="field">
-                <div class="consent">
-                  <input id="consent" name="consent" type="checkbox" value="yes">
-                  <label for="consent">I agree to be contacted about this loan enquiry.</label>
-                </div>
-                <p class="fine-print"><a href="#legal" data-legal="privacy">Privacy policy</a></p>
-                <p class="field-error" id="consent-error" hidden></p>
-              </div>
-
               <div class="form-actions">
-                <button type="button" class="btn btn-primary btn-block" id="next-btn">Continue</button>
+                <button type="button" class="btn btn-primary btn-block" id="next-btn">Send OTP</button>
               </div>
             </div>
 
             <div id="step-otp" class="step-shell" hidden>
               <p class="step-label" id="otp-label" tabindex="-1">Verify your mobile</p>
               <p class="otp-lede" id="otp-lede">We sent a 6-digit code to your number.</p>
-
               <div class="otp-row" role="group" aria-label="One-time password">
                 <input class="otp-digit" id="otp-0" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Digit 1">
                 <input class="otp-digit" id="otp-1" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 2">
@@ -143,7 +191,6 @@
                 <button type="button" class="link-btn" id="otp-resend" disabled>Resend code</button>
                 <span id="otp-timer" aria-live="polite"></span>
               </p>
-
               <div class="form-actions">
                 <button type="button" class="btn btn-ghost" id="otp-back-btn">Back</button>
                 <button type="button" class="btn btn-primary" id="otp-verify-btn">Verify &amp; continue</button>
@@ -151,190 +198,251 @@
             </div>
 
             <div id="step-2" class="step-shell" hidden>
-              <p class="step-label" id="step-2-label" tabindex="-1">Almost done · product details</p>
+              <div class="product-tabs product-tabs--details" id="product-tabs-details" role="group" aria-label="Choose a loan type">
+                <button type="button" class="product-tab" data-product="Personal Loan" aria-pressed="true">
+                  <span class="product-tab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-3.3 0-6 1.7-6 3.8V20h12v-2.2C18 15.7 15.3 14 12 14z"/></svg></span>
+                  <span>Personal</span>
+                </button>
+                <button type="button" class="product-tab" data-product="Business Loan" aria-pressed="false">
+                  <span class="product-tab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M4 7h16v2H4V7zm1 4h14a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a1 1 0 0 1 1-1zm7 2.2c-1.5 0-2.5.8-2.5 1.8S10.5 17 12 17s2.5-.8 2.5-1.8-.9-1.8-2.5-1.8zM3 4h18v2H3V4z"/></svg></span>
+                  <span>Business</span>
+                </button>
+                <button type="button" class="product-tab" data-product="Home Loan" aria-pressed="false">
+                  <span class="product-tab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 3 3 10h2v9h5v-5h4v5h5v-9h2L12 3z"/></svg></span>
+                  <span>Home</span>
+                </button>
+              </div>
+              <p class="step-label" id="step-2-label" tabindex="-1">Complete your details</p>
+
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="email" placeholder="riya@email.com">
+                <p class="field-error" id="email-error" hidden></p>
+              </div>
+              <div class="field">
+                <label for="full-name">Full name</label>
+                <input id="full-name" name="full_name" type="text" autocomplete="name" placeholder="Riya Kapoor">
+                <p class="field-error" id="full-name-error" hidden></p>
+              </div>
 
               <div data-step-product="Personal Loan">
-                <div class="field-grid">
-                  <div class="field">
-                    <label for="monthly-salary">Monthly salary (₹)</label>
-                    <input id="monthly-salary" name="monthly_salary" type="number" inputmode="numeric" min="1" step="1" placeholder="52000">
-                    <p class="field-error" id="monthly-salary-error" hidden></p>
-                  </div>
-                  <div class="field">
-                    <label for="employer-name">Employer name</label>
-                    <input id="employer-name" name="employer_name" type="text" autocomplete="organization" placeholder="Cedar Soft Pvt Ltd">
-                    <p class="field-error" id="employer-name-error" hidden></p>
-                  </div>
+                <div class="field">
+                  <label for="employment-type">Employment type</label>
+                  <select id="employment-type" name="employment_type">
+                    <option value="">Select</option>
+                    <option value="Salaried">Salaried</option>
+                    <option value="Self-employed">Self-employed</option>
+                    <option value="Professional">Professional</option>
+                  </select>
+                  <p class="field-error" id="employment-type-error" hidden></p>
                 </div>
               </div>
 
               <div data-step-product="Business Loan" hidden>
                 <div class="field-grid">
                   <div class="field">
-                    <label for="annual-turnover">Annual turnover (₹)</label>
-                    <input id="annual-turnover" name="annual_turnover" type="number" inputmode="numeric" min="1" step="1" placeholder="3800000">
-                    <p class="field-error" id="annual-turnover-error" hidden></p>
+                    <label for="business-type">Business type</label>
+                    <select id="business-type" name="business_type">
+                      <option value="">Select</option>
+                      <option value="Proprietorship">Proprietorship</option>
+                      <option value="Partnership">Partnership</option>
+                      <option value="Private Limited">Private Limited</option>
+                      <option value="LLP">LLP</option>
+                    </select>
+                    <p class="field-error" id="business-type-error" hidden></p>
                   </div>
                   <div class="field">
-                    <label for="business-vintage">Business vintage (years)</label>
-                    <input id="business-vintage" name="business_vintage_years" type="number" inputmode="numeric" min="0" step="1" placeholder="5">
-                    <p class="field-error" id="business-vintage-error" hidden></p>
+                    <label for="business-name">Business name</label>
+                    <input id="business-name" name="business_name" type="text" placeholder="Cedar Traders">
+                    <p class="field-error" id="business-name-error" hidden></p>
                   </div>
+                </div>
+                <div class="field">
+                  <label for="gstin">GSTIN no</label>
+                  <input id="gstin" name="gstin" type="text" maxlength="15" placeholder="22AAAAA0000A1Z5" style="text-transform:uppercase">
+                  <p class="field-error" id="gstin-error" hidden></p>
                 </div>
               </div>
 
               <div data-step-product="Home Loan" hidden>
+                <div class="field">
+                  <label for="address">Address</label>
+                  <input id="address" name="address" type="text" autocomplete="street-address" placeholder="12 Lake View Road">
+                  <p class="field-error" id="address-error" hidden></p>
+                </div>
                 <div class="field-grid">
                   <div class="field">
-                    <label for="monthly-income">Monthly income (₹)</label>
-                    <input id="monthly-income" name="monthly_income" type="number" inputmode="numeric" min="1" step="1" placeholder="78000">
-                    <p class="field-error" id="monthly-income-error" hidden></p>
+                    <label for="city">City</label>
+                    <input id="city" name="city" type="text" autocomplete="address-level2" placeholder="Indore">
+                    <p class="field-error" id="city-error" hidden></p>
                   </div>
                   <div class="field">
-                    <label for="property-city">Property city</label>
-                    <input id="property-city" name="property_city" type="text" autocomplete="address-level2" placeholder="Indore">
-                    <p class="field-error" id="property-city-error" hidden></p>
+                    <label for="pin">PIN</label>
+                    <input id="pin" name="pin" type="text" inputmode="numeric" maxlength="6" placeholder="452001">
+                    <p class="field-error" id="pin-error" hidden></p>
                   </div>
                 </div>
               </div>
 
+              <div class="field">
+                <label for="loan-amount">Loan amount (₹)</label>
+                <input id="loan-amount" name="loan_amount" type="number" inputmode="numeric" min="1" step="1" placeholder="450000">
+                <div class="amount-picks" id="amount-picks" role="group" aria-label="Quick amount picks"></div>
+                <p class="field-error" id="loan-amount-error" hidden></p>
+              </div>
+
+              <div class="field">
+                <div class="consent">
+                  <input id="consent" name="consent" type="checkbox" value="yes">
+                  <label for="consent">I agree to the Privacy policy and to be contacted about this enquiry.</label>
+                </div>
+                <p class="fine-print"><a href="#legal" data-legal="privacy">Privacy policy</a> · <a href="#legal" data-legal="terms">Terms</a></p>
+                <p class="field-error" id="consent-error" hidden></p>
+              </div>
+
               <div class="form-actions">
                 <button type="button" class="btn btn-ghost" id="back-btn">Back</button>
-                <button type="button" class="btn btn-primary" id="submit-btn">Submit enquiry</button>
+                <button type="button" class="btn btn-primary" id="submit-btn">Submit</button>
+              </div>
+            </div>
+
+            <div id="step-processing" class="step-shell step-shell--center" hidden>
+              <div class="process-spinner" aria-hidden="true"></div>
+              <p class="step-label" id="processing-label" tabindex="-1">Checking eligibility…</p>
+              <p class="otp-lede">Matching your details with our partner banks.</p>
+            </div>
+
+            <div id="step-success" class="step-shell" hidden>
+              <div class="success success--card" id="form-success" role="status"></div>
+              <div class="form-actions">
+                <button type="button" class="btn btn-primary btn-block" id="success-done-btn" data-apply-close>Done</button>
               </div>
             </div>
 
             <p class="preview-note" id="layout-note">We use your details only to contact you about this enquiry.</p>
-            <div class="success" id="form-success" role="status" hidden></div>
           </form>
         </div>
+      </div>
+    </div>
+
+    <section class="section benefits" id="benefits" aria-labelledby="benefits-title">
+      <div class="wrap">
+        <div class="section-head center">
+          <p class="eyebrow">Why QuickLoan</p>
+          <h2 id="benefits-title">Benefits of an Instant Personal Loan enquiry</h2>
+        </div>
+        <ul class="benefit-grid" id="benefit-grid"></ul>
       </div>
     </section>
 
     <section class="section how" id="how" aria-labelledby="how-title">
       <div class="wrap">
         <div class="section-head center">
-          <p class="eyebrow">How it works</p>
-          <h2 id="how-title">Three moves to a clear next step</h2>
+          <p class="eyebrow">Process</p>
+          <h2 id="how-title">How it works</h2>
         </div>
-        <ol class="how-grid">
-          <li>
-            <span class="how-num">01</span>
-            <h3>Pick your loan</h3>
-            <p>Personal, Business or Home — the form only asks what that path needs.</p>
-          </li>
-          <li>
-            <span class="how-num">02</span>
-            <h3>Share contact & amount</h3>
-            <p>We save a partial enquiry first, so progress is not lost mid-way.</p>
-          </li>
-          <li>
-            <span class="how-num">03</span>
-            <h3>Finish details</h3>
-            <p>Salary, turnover or property city — then your enquiry is marked complete.</p>
-          </li>
-        </ol>
+        <ol class="process-track" id="process-track"></ol>
       </div>
     </section>
 
-    <section class="section" id="emi" aria-labelledby="emi-title">
+    <section class="section guides" id="guides" aria-labelledby="guides-title">
       <div class="wrap">
-        <div class="section-head">
-          <p class="eyebrow">Plan your EMI</p>
-          <h2 id="emi-title">EMI calculator</h2>
-          <p id="emi-lede">Adjust amount, rate and tenure. See monthly EMI, interest and total in Indian rupees.</p>
+        <div class="section-head center">
+          <p class="eyebrow">Before you apply</p>
+          <h2 id="guides-title">Do’s and Don’ts about Personal Loan</h2>
         </div>
-
-        <div class="emi-stage">
-          <div class="emi-calculator emi-3d">
-            <div class="emi-glow" aria-hidden="true"></div>
-            <div class="emi-grid">
-              <div class="emi-controls">
-                <div class="emi-field">
-                  <div class="emi-field-head">
-                    <label for="emi-amount">Loan amount (₹)</label>
-                  </div>
-                  <div class="emi-pair">
-                    <input id="emi-amount-range" type="range" min="50000" max="10000000" step="50000" value="450000" aria-label="Loan amount slider">
-                    <input id="emi-amount" type="number" min="50000" max="10000000" step="1" value="450000">
-                  </div>
-                </div>
-
-                <div class="emi-field">
-                  <div class="emi-field-head">
-                    <label for="emi-rate">Annual interest rate (%)</label>
-                  </div>
-                  <div class="emi-pair">
-                    <input id="emi-rate-range" type="range" min="0" max="24" step="0.1" value="11.25" aria-label="Interest rate slider">
-                    <input id="emi-rate" type="number" min="0" max="24" step="0.1" value="11.25">
-                  </div>
-                </div>
-
-                <div class="emi-field">
-                  <div class="emi-field-head">
-                    <label for="emi-tenure">Tenure</label>
-                  </div>
-                  <div class="emi-pair">
-                    <input id="emi-tenure-range" type="range" min="1" max="30" step="1" value="4" aria-label="Tenure slider">
-                    <input id="emi-tenure" type="number" min="1" max="360" step="1" value="4">
-                  </div>
-                  <fieldset class="unit-switch">
-                    <legend class="visually-hidden">Tenure unit</legend>
-                    <label>
-                      <input type="radio" name="tenure-unit" value="years" checked>
-                      <span>Years</span>
-                    </label>
-                    <label>
-                      <input type="radio" name="tenure-unit" value="months">
-                      <span>Months</span>
-                    </label>
-                  </fieldset>
-                </div>
-              </div>
-
-              <dl class="emi-results emi-results--3d">
-                <div class="emi-results-hero">
-                  <dt>Monthly EMI</dt>
-                  <dd id="emi-monthly">₹ 0</dd>
-                  <p>Estimate based on your inputs</p>
-                </div>
-                <div>
-                  <dt>Total interest</dt>
-                  <dd id="emi-interest">₹ 0</dd>
-                </div>
-                <div>
-                  <dt>Total payment</dt>
-                  <dd id="emi-total">₹ 0</dd>
-                </div>
-              </dl>
+        <div class="dos-grid">
+          <div class="guide-card guide-card--do">
+            <div class="guide-card-head">
+              <span class="guide-badge guide-badge--do" aria-hidden="true">✓</span>
+              <h3>Do’s</h3>
             </div>
+            <ul id="dos-list"></ul>
+          </div>
+          <div class="guide-card guide-card--dont">
+            <div class="guide-card-head">
+              <span class="guide-badge guide-badge--dont" aria-hidden="true">×</span>
+              <h3>Don’ts</h3>
+            </div>
+            <ul id="donts-list"></ul>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="section know" id="know" aria-labelledby="know-title">
+      <div class="wrap">
+        <div class="section-head center">
+          <p class="eyebrow">Things to know</p>
+          <h2 id="know-title">Things to Know Before Applying for a Personal Loan</h2>
+        </div>
+        <div class="slider" data-slider>
+          <div class="slider-viewport">
+            <ul class="know-rail slider-track" id="know-rail"></ul>
+          </div>
+          <div class="slider-bar">
+            <button type="button" class="slider-arrow" data-slide="-1" aria-label="Previous">‹</button>
+            <div class="slider-track-ui" aria-hidden="true"><span class="slider-thumb"></span></div>
+            <button type="button" class="slider-arrow" data-slide="1" aria-label="Next">›</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section ratings" id="ratings" aria-labelledby="ratings-title">
+      <div class="wrap">
+        <div class="section-head center">
+          <h2 id="ratings-title">Our App Ratings from 2.4L+ happy users</h2>
+        </div>
+        <div class="rating-pair" id="rating-pair"></div>
       </div>
     </section>
 
     <section class="section stories" id="stories" aria-labelledby="trust-title">
       <div class="wrap">
         <div class="section-head center">
-          <p class="eyebrow">Customer stories</p>
-          <h2 id="trust-title">People who started with a short enquiry</h2>
+          <p class="eyebrow">Testimonials</p>
+          <h2 id="trust-title">Hear from our loan customers</h2>
           <p id="trust-lede">Recent customers share how the first check felt on their phone.</p>
         </div>
-        <ul class="story-grid" id="logo-row"></ul>
+        <ul class="story-grid story-grid--rich" id="logo-row"></ul>
       </div>
     </section>
 
-    <section class="section why" aria-labelledby="why-title">
+    <section class="section cities" id="cities" aria-labelledby="cities-title">
       <div class="wrap">
         <div class="section-head">
-          <p class="eyebrow">Why QuickLoan</p>
-          <h2 id="why-title">Built to feel calm and clear</h2>
+          <h2 id="cities-title">Get an Instant Personal Loan in Major Indian Cities</h2>
+          <p>Apply online in select cities and get a quick first check with minimal documentation.</p>
         </div>
-        <ul class="trust-points">
-          <li><strong>Clear product choice</strong> Personal, Business and Home stay separate so step 2 asks only what that loan needs.</li>
-          <li><strong>Partial then complete</strong> Mobile and amount are captured early, even if details are left unfinished.</li>
-          <li><strong>Consent first</strong> The contact checkbox is required before an enquiry id is created.</li>
-        </ul>
+        <div class="slider" data-slider>
+          <div class="slider-viewport">
+            <ul class="chip-rail slider-track" id="city-rail"></ul>
+          </div>
+          <div class="slider-bar">
+            <button type="button" class="slider-arrow" data-slide="-1" aria-label="Previous cities">‹</button>
+            <div class="slider-track-ui" aria-hidden="true"><span class="slider-thumb"></span></div>
+            <button type="button" class="slider-arrow slider-arrow--next" data-slide="1" aria-label="Next cities">›</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section salaries" id="salaries" aria-labelledby="salaries-title">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="salaries-title">Apply for a personal loan based on your salary</h2>
+        </div>
+        <div class="slider" data-slider>
+          <div class="slider-viewport">
+            <ul class="chip-rail chip-rail--cool slider-track" id="salary-rail"></ul>
+          </div>
+          <div class="slider-bar">
+            <button type="button" class="slider-arrow" data-slide="-1" aria-label="Previous salaries">‹</button>
+            <div class="slider-track-ui" aria-hidden="true"><span class="slider-thumb"></span></div>
+            <button type="button" class="slider-arrow slider-arrow--next" data-slide="1" aria-label="Next salaries">›</button>
+          </div>
+        </div>
         <p class="fine-print">We store enquiry details only to contact you about this request. Read our <a href="#legal" data-legal="privacy">Privacy policy</a> and <a href="#legal" data-legal="terms">Terms</a>.</p>
       </div>
     </section>
@@ -356,7 +464,7 @@
           <span aria-hidden="true"> · </span>
           <a href="#legal" data-legal="terms">Terms</a>
           <span aria-hidden="true"> · </span>
-          <a href="#apply">Apply</a>
+          <a href="#apply" data-open-apply>Apply</a>
         </p>
       </div>
     </div>

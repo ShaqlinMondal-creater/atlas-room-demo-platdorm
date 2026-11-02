@@ -14,34 +14,18 @@
   var monthlyEl = document.getElementById("emi-monthly");
   var interestEl = document.getElementById("emi-interest");
   var totalEl = document.getElementById("emi-total");
-  var unitInputs = document.querySelectorAll('input[name="tenure-unit"]');
 
-  if (!amountInput || !rateInput || !tenureInput) return;
+  if (!amountInput || !rateInput || !tenureInput || !amountRange || !rateRange || !tenureRange) {
+    return;
+  }
+
+  var tenureMin = 1;
+  var tenureMax = cfg.tenureMax || 60;
+  var tenureDefault = cfg.tenure || 48;
 
   function money(value) {
     var rounded = Math.round(Number(value) || 0);
     return "₹ " + rounded.toLocaleString("en-IN");
-  }
-
-  function currentUnit() {
-    var selected = document.querySelector('input[name="tenure-unit"]:checked');
-    return selected ? selected.value : "years";
-  }
-
-  function syncTenureLimits() {
-    var unit = currentUnit();
-    var max = unit === "years" ? 30 : 360;
-    var min = 1;
-    tenureRange.min = String(min);
-    tenureRange.max = String(max);
-    tenureInput.min = String(min);
-    tenureInput.max = String(max);
-
-    var value = Number(tenureInput.value) || min;
-    if (value > max) value = max;
-    if (value < min) value = min;
-    tenureInput.value = String(value);
-    tenureRange.value = String(value);
   }
 
   function clamp(value, min, max) {
@@ -70,11 +54,6 @@
     rangeEl.addEventListener("input", fromRange);
     inputEl.addEventListener("input", fromInput);
     inputEl.addEventListener("change", fromInput);
-  }
-
-  function monthsCount() {
-    var tenure = Number(tenureInput.value) || 1;
-    return currentUnit() === "years" ? tenure * 12 : tenure;
   }
 
   function calcEmi(principal, annualRate, months) {
@@ -110,7 +89,8 @@
   }
 
   function render() {
-    var result = calcEmi(amountInput.value, rateInput.value, monthsCount());
+    var months = clamp(tenureInput.value, tenureMin, tenureMax);
+    var result = calcEmi(amountInput.value, rateInput.value, months);
     softSet(monthlyEl, money(result.emi));
     softSet(interestEl, money(result.interest));
     softSet(totalEl, money(result.total));
@@ -120,27 +100,22 @@
   amountRange.value = String(cfg.amount || 450000);
   rateInput.value = String(cfg.rate || 11.25);
   rateRange.value = String(cfg.rate || 11.25);
-  tenureInput.value = String(cfg.tenure || 4);
-  tenureRange.value = String(cfg.tenure || 4);
-
-  unitInputs.forEach(function (input) {
-    input.checked = input.value === (cfg.unit || "years");
-    input.addEventListener("change", function () {
-      syncTenureLimits();
-      render();
-    });
-  });
+  tenureInput.value = String(tenureDefault);
+  tenureRange.value = String(tenureDefault);
+  tenureInput.min = String(tenureMin);
+  tenureInput.max = String(tenureMax);
+  tenureRange.min = String(tenureMin);
+  tenureRange.max = String(tenureMax);
 
   pair(
     amountRange,
     amountInput,
     cfg.amountMin || 50000,
-    cfg.amountMax || 10000000,
+    cfg.amountMax || 1500000,
     1
   );
-  pair(rateRange, rateInput, cfg.rateMin || 0, cfg.rateMax || 24, 0.1);
-  pair(tenureRange, tenureInput, 1, 360, 1);
+  pair(rateRange, rateInput, cfg.rateMin || 9.99, cfg.rateMax || 24, 0.1);
+  pair(tenureRange, tenureInput, tenureMin, tenureMax, 1);
 
-  syncTenureLimits();
   render();
 })();
