@@ -3,35 +3,43 @@
 Scroll-driven space showcase built with **vanilla JS + three.js**.  
 Access code in Atlas Room: **`COSMOS9898`**.
 
-## Scene progress
+## Scenes
 
-| Scene | Status |
-|-------|--------|
-| 1 · Starfield + title | **Ready to test** |
-| 2 · Sun + planets | Next |
-| 3 · Nebula | Planned |
-| 4 · Galaxy + Overview / Credits / Contact | Planned |
+| Scene | What you see |
+|-------|----------------|
+| 1 · Starfield + title | Opening HUD, drifting stars |
+| 2 · Sun + planets | Glowing sun, coloured worlds on orbits |
+| 3 · Nebula | Soft additive particle cloud |
+| 4 · Galaxy | Spiral of particles |
+| Finale | Overview · Credits · Contact |
 
 ## How to preview (Atlas Room)
 
 1. Run the Atlas Room app: `npm run dev`
-2. Open a template card **Universe Cosmos** and enter code `COSMOS9898`
+2. Open **Universe Cosmos** and enter code `COSMOS9898`
 3. Or open directly while developing:  
    `http://127.0.0.1:5173/templates/COSMOS9898/index.html?desk=1`
 
 ## How to change story text
 
-Edit `src/config.js` — titles, ledes, and particle counts live there.
+Edit `src/config.js` — titles, ledes, scroll stops, and particle counts live there.
 
-## Notes (Scene 1)
+## Controls
 
-- Stars are `THREE.Points` (cheap on GPU).
+- **Scroll** moves the camera along the voyage path.
+- **Sound off / Sound on** (top-right) starts a soft Web Audio drone. Default is **off** (browser autoplay rules).
+- Gentle pointer parallax on the camera (disabled when `prefers-reduced-motion` is set).
+
+## Performance notes
+
+- Stars / nebula / galaxy use `THREE.Points` (cheap on GPU).
 - Pixel ratio is capped at **2**.
-- Mobile uses fewer stars.
-- `prefers-reduced-motion` turns off twinkle / parallax and uses fewer points.
+- Mobile uses fewer particles and lower sphere segments.
+- `prefers-reduced-motion` slows orbits, turns off twinkle / parallax, and uses fewer points.
+- Scene modules expose `dispose()` for geometries and materials.
 - If WebGL is missing, a plain HTML fallback is shown.
 
-## Later: local Vite build (optional)
+## Optional: local Vite build
 
-Scene 1 uses an import map + CDN for `three` so it works as static files.  
-A local Vite + npm `three` build can replace the CDN when we finalize hosting.
+This template uses an import map + CDN for `three` so it works as static files.  
+A local Vite + npm `three` build can replace the CDN when you finalize hosting.

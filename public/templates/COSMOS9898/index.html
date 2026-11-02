@@ -42,6 +42,8 @@
 
   <canvas id="webgl" aria-hidden="true"></canvas>
 
+  <button type="button" class="audio-toggle" id="audio-toggle" aria-pressed="false">Sound off</button>
+
   <div class="hud" id="hud">
     <div>
       <p class="hud__eyebrow" id="start-brand">Universe Cosmos</p>
@@ -52,8 +54,37 @@
     </div>
   </div>
 
-  <!-- Invisible tall page: scrolling drives the camera -->
+  <div class="caption" id="caption-sun">
+    <h2></h2>
+    <p></p>
+  </div>
+  <div class="caption" id="caption-nebula">
+    <h2></h2>
+    <p></p>
+  </div>
+  <div class="caption" id="caption-galaxy">
+    <h2></h2>
+    <p></p>
+  </div>
+
+  <!-- Tall page: scrolling drives the camera through each scene -->
   <div class="scroll-track" aria-hidden="true"></div>
+
+  <section class="finale" id="finale">
+    <article class="finale__card">
+      <h2 id="overview-title">Overview</h2>
+      <p id="overview-body"></p>
+    </article>
+    <article class="finale__card">
+      <h2 id="credits-title">Credits</h2>
+      <p id="credits-body"></p>
+    </article>
+    <article class="finale__card">
+      <h2 id="contact-title">Contact</h2>
+      <p id="contact-body"></p>
+      <p><a id="contact-link" href="/">Back to Atlas Room</a></p>
+    </article>
+  </section>
 
   <script type="module" src="./src/main.js"></script>
 </body>

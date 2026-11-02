@@ -30,10 +30,19 @@ export function createStarfield(options) {
   var color = new THREE.Color();
 
   for (i = 0; i < count; i += 1) {
-    // Spread stars in a large box around the camera path
-    var x = (Math.random() - 0.5) * 220;
-    var y = (Math.random() - 0.5) * 140;
-    var z = (Math.random() - 0.5) * 220;
+    // Spread stars in a large box, but keep a clear tunnel along the voyage
+    // so sizeAttenuation never turns nearby dots into giant squares.
+    var x;
+    var y;
+    var z;
+    var tries = 0;
+    do {
+      x = (Math.random() - 0.5) * 240;
+      y = (Math.random() - 0.5) * 160;
+      z = (Math.random() - 0.5) * 280 - 40;
+      tries += 1;
+      // Corridor roughly matching cameraPath waypoints (z from ~28 → -175)
+    } while (tries < 12 && Math.abs(x) < 12 && Math.abs(y) < 10 && z < 40 && z > -190);
     positions[i * 3] = x;
     positions[i * 3 + 1] = y;
     positions[i * 3 + 2] = z;
@@ -54,11 +63,11 @@ export function createStarfield(options) {
   geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
   var material = new THREE.PointsMaterial({
-    size: isMobile() ? 0.55 : 0.7,
+    size: isMobile() ? 0.45 : 0.55,
     sizeAttenuation: true,
     vertexColors: true,
     transparent: true,
-    opacity: 0.9,
+    opacity: 0.88,
     depthWrite: false,
     blending: THREE.AdditiveBlending,
   });
