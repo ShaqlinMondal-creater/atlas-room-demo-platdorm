@@ -497,6 +497,8 @@ code {
   border-radius: 14px;
   background: #fff;
   font: inherit;
+  /* 16px avoids iOS auto-zoom on focus */
+  font-size: 16px;
   font-family: ui-monospace, Consolas, "Courier New", monospace;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -548,14 +550,23 @@ code {
   z-index: 40;
   display: grid;
   place-items: center;
-  padding: 16px;
+  padding: max(12px, env(safe-area-inset-top, 0px))
+    max(12px, env(safe-area-inset-right, 0px))
+    max(12px, env(safe-area-inset-bottom, 0px))
+    max(12px, env(safe-area-inset-left, 0px));
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
   background: rgba(18, 35, 28, 0.55);
   animation: rise-in 0.25s ease;
 }
 
 .modal {
   width: min(100%, 460px);
+  max-height: min(92dvh, 920px);
   padding: 22px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   animation: rise-in 0.35s ease;
 }
 
@@ -630,20 +641,27 @@ code {
 
 .modal-preview-veil {
   position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   min-height: 34px;
-  padding: 0 12px;
+  max-width: calc(100% - 20px);
+  padding: 8px 12px;
   border-radius: 999px;
   background: rgba(18, 35, 28, 0.72);
   color: #f5fff8;
   font-size: 0.78rem;
   font-weight: 700;
+  line-height: 1.25;
   backdrop-filter: blur(6px);
+}
+
+.modal-preview-veil span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .modal-preview--soon .modal-preview-veil {
@@ -661,6 +679,12 @@ code {
   display: flex;
   gap: 12px;
   align-items: flex-start;
+  min-width: 0;
+  flex: 1;
+}
+
+.modal-heading > div {
+  min-width: 0;
 }
 
 .modal-close {
@@ -679,7 +703,9 @@ code {
 
 .modal h2 {
   margin-top: 4px;
-  font-size: 1.55rem;
+  font-size: clamp(1.2rem, 4.5vw, 1.55rem);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
 }
 
 .modal-copy {
@@ -1335,16 +1361,76 @@ code {
     flex-basis: 100%;
   }
 
-  .modal-preview-frame {
-    height: 168px;
+  .modal-backdrop {
+    place-items: end center;
+    padding: max(8px, env(safe-area-inset-top, 0px))
+      max(10px, env(safe-area-inset-right, 0px))
+      max(10px, env(safe-area-inset-bottom, 0px))
+      max(10px, env(safe-area-inset-left, 0px));
+  }
+
+  .modal,
+  .modal-wide {
+    width: 100%;
+    max-height: min(88dvh, 100%);
+    margin: 0;
+    padding: 16px 14px calc(16px + env(safe-area-inset-bottom, 0px));
+    border-radius: 22px 22px 16px 16px;
+  }
+
+  .modal-top {
+    gap: 8px;
+  }
+
+  .modal-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+  }
+
+  .modal-close {
+    width: 36px;
+    height: 36px;
+    font-size: 1.4rem;
+  }
+
+  .modal-preview {
+    margin-top: 12px;
+    min-height: 132px;
+    border-radius: 14px;
+  }
+
+  .modal-preview-frame,
+  .modal-preview-image {
+    height: 140px;
   }
 
   .modal-preview-frame iframe {
-    transform: scale(0.32);
+    transform: scale(0.28);
   }
 
-  .modal-preview-image {
-    height: 168px;
+  .modal-preview-veil {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    max-width: calc(100% - 16px);
+    padding: 7px 10px;
+    font-size: 0.72rem;
+  }
+
+  .modal-copy {
+    font-size: 0.94rem;
+  }
+
+  .unlock-form {
+    margin-top: 12px;
+    gap: 8px;
+  }
+
+  .unlock-form input,
+  .unlock-form button,
+  .modal .btn {
+    min-height: 48px;
   }
 
   .template-meta {

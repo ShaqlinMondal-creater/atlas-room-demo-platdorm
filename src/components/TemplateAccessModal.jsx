@@ -4,20 +4,43 @@ import { normalizeCode } from "../data/templates";
 import { buildViewUrl, issueAccessToken } from "../lib/accessToken";
 import { IconCheck, IconKey, IconLock } from "./Icons";
 
+function useNarrowPhone() {
+  const [narrow, setNarrow] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(max-width: 700px)").matches
+      : false
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 700px)");
+    const update = () => setNarrow(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  return narrow;
+}
+
 export default function TemplateAccessModal({ template, onClose, onIssued }) {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [opened, setOpened] = useState(false);
   const inputRef = useRef(null);
   const titleId = useId();
+  const narrow = useNarrowPhone();
   const accent = template.theme?.accent || "#2f6f4e";
   const soft = template.theme?.soft || "#e7f2ea";
   const deskSrc = template.previewPath
     ? `${template.previewPath}?desk=1`
     : "";
+  // Live iframe desk preview is awkward on phones — prefer the thumbnail there.
+  const useLiveDesk = Boolean(deskSrc) && !narrow;
+  const useThumb = Boolean(template.thumbnail) && (narrow || !deskSrc);
 
   useEffect(() => {
-    inputRef.current?.focus();
+    // Delay focus slightly so iOS doesn't jump the sheet under the keyboard mid-open.
+    const focusTimer = window.setTimeout(() => inputRef.current?.focus(), 120);
 
     function onKeyDown(event) {
       if (event.key === "Escape") onClose();
@@ -28,6 +51,7 @@ export default function TemplateAccessModal({ template, onClose, onIssued }) {
     document.body.style.overflow = "hidden";
 
     return () => {
+      window.clearTimeout(focusTimer);
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previous;
     };
@@ -92,11 +116,11 @@ export default function TemplateAccessModal({ template, onClose, onIssued }) {
         {!opened ? (
           <>
             <div className="modal-preview">
-              {deskSrc ? (
+              {useLiveDesk ? (
                 <div className="modal-preview-frame" aria-hidden="true">
                   <iframe title="" src={deskSrc} tabIndex={-1} />
                 </div>
-              ) : template.thumbnail ? (
+              ) : useThumb ? (
                 <img
                   className="modal-preview-image"
                   src={template.thumbnail}
@@ -105,7 +129,11 @@ export default function TemplateAccessModal({ template, onClose, onIssued }) {
               ) : null}
               <div className="modal-preview-veil">
                 <IconLock size={16} />
-                <span>Live desk preview · unlock to open full tab</span>
+                <span>
+                  {narrow
+                    ? "Unlock to open full preview"
+                    : "Live desk preview · unlock to open full tab"}
+                </span>
               </div>
             </div>
 
