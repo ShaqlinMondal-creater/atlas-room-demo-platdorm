@@ -60,6 +60,24 @@ export const templates = [
     },
   },
   {
+    code: "TEST5501",
+    name: "Test Now",
+    category: "Online exam",
+    stack: "HTML · CSS · JS",
+    summary:
+      "Remote MCQ exam desk: 100 sample questions, question map, timer, mark-for-review, then a clear score screen.",
+    previewPath: "/templates/TEST5501/index.html",
+    thumbnail: "/thumbnails/TEST5501.svg",
+    available: true,
+    status: "demo ready",
+    tags: ["Exam", "MCQ", "Score"],
+    theme: {
+      accent: "#2f8f6b",
+      soft: "#e7f2ea",
+      label: "Exam green · System UI",
+    },
+  },
+  {
     code: "SHOP3301",
     name: "Marketfold",
     category: "Storefront",

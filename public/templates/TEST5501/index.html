@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Test Now | Remote MCQ exam</title>
+  <meta name="description" content="Test Now — sample remote exam with 100 MCQs and a score screen.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%232f8f6b'/%3E%3Cpath d='M5 8.2l2 2 4-4' stroke='%23fff' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>html.gate-lock body{visibility:hidden}</style>
+  <script src="/access-gate.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Start -->
+    <section class="screen screen--start" id="screen-start" hidden>
+      <header class="topbar topbar--simple">
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true">✓</span>
+          <span>Test Now</span>
+        </div>
+        <span class="pill"><span aria-hidden="true">🛡</span> Remote Test · 100 MCQ</span>
+      </header>
+      <div class="start-card">
+        <p class="eyebrow">Demo exam desk</p>
+        <h1>General Aptitude Practice</h1>
+        <p class="lede">
+          100 sample multiple-choice questions. Use Previous / Next, mark items for review,
+          then submit to see your score. Nothing is saved to a server.
+        </p>
+        <ul class="start-facts">
+          <li><strong>100</strong> MCQs</li>
+          <li><strong>60</strong> min timer</li>
+          <li><strong>4</strong> options each</li>
+        </ul>
+        <button type="button" class="btn btn--primary" id="btn-start">Start exam</button>
+        <p class="fine">Portfolio sample · fictional questions</p>
+      </div>
+    </section>
+
+    <!-- Exam -->
+    <section class="screen screen--exam" id="screen-exam" hidden>
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true">✓</span>
+          <span>Test Now</span>
+        </div>
+        <p class="exam-title" id="exam-title">General Aptitude Practice</p>
+        <div class="topbar__meta">
+          <p class="timer" id="timer" aria-live="polite">
+            <span class="timer__icon" aria-hidden="true">⏱</span>
+            <span id="timer-text">60:00 Remaining</span>
+          </p>
+          <div class="progress-block">
+            <p class="progress-label" id="progress-label">Question 1 of 100</p>
+            <div class="progress-track" aria-hidden="true">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="exam-layout">
+        <main class="question-card" aria-labelledby="q-label">
+          <p class="q-kicker" id="q-label">Question 1</p>
+          <h2 class="q-text" id="q-text"></h2>
+          <div class="options" id="options" role="radiogroup" aria-labelledby="q-label"></div>
+        </main>
+
+        <aside class="map-card" aria-label="Question map">
+          <div class="map-card__head">
+            <h3>Question map</h3>
+            <button type="button" class="map-toggle" id="map-toggle" hidden>Map</button>
+          </div>
+          <div class="map-grid" id="map-grid"></div>
+          <ul class="map-legend">
+            <li><span class="dot dot--answered"></span> Answered</li>
+            <li><span class="dot dot--current"></span> Current</li>
+            <li><span class="dot dot--review"></span> Review</li>
+            <li><span class="dot dot--empty"></span> Unanswered</li>
+          </ul>
+        </aside>
+      </div>
+
+      <footer class="exam-bar">
+        <button type="button" class="btn btn--ghost" id="btn-prev">← Previous</button>
+        <button type="button" class="btn btn--review" id="btn-review">⚑ Mark for review</button>
+        <div class="exam-bar__right">
+          <button type="button" class="btn btn--ghost" id="btn-submit-early">Submit</button>
+          <button type="button" class="btn btn--primary" id="btn-next">Next →</button>
+        </div>
+      </footer>
+    </section>
+
+    <!-- Results -->
+    <section class="screen screen--results" id="screen-results" hidden>
+      <header class="topbar topbar--simple">
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true">✓</span>
+          <span>Test Now</span>
+        </div>
+        <span class="pill"><span aria-hidden="true">🛡</span> Remote Test · 100 MCQ</span>
+      </header>
+      <div class="results-card" role="status">
+        <p class="results-emoji" aria-hidden="true">🎉</p>
+        <h2 id="results-title">Nice work</h2>
+        <p class="results-sub">Exam complete</p>
+        <div class="score-row">
+          <div class="score-ring" id="score-ring" aria-hidden="true">
+            <svg viewBox="0 0 120 120">
+              <circle class="score-ring__track" cx="60" cy="60" r="52" />
+              <circle class="score-ring__value" id="score-ring-value" cx="60" cy="60" r="52" />
+            </svg>
+            <span class="score-ring__label" id="score-ring-label">0 / 100</span>
+          </div>
+          <div class="score-nums">
+            <p class="score-frac" id="score-frac">0 / 100</p>
+            <p class="score-pct" id="score-pct">0%</p>
+            <p class="score-out">out of 100 MCQ</p>
+          </div>
+        </div>
+        <div class="stat-pills">
+          <span class="stat-pill stat-pill--ok"><span>✓</span> Correct <strong id="stat-correct">0</strong></span>
+          <span class="stat-pill stat-pill--bad"><span>✕</span> Wrong <strong id="stat-wrong">0</strong></span>
+          <span class="stat-pill stat-pill--skip"><span>–</span> Skipped <strong id="stat-skip">0</strong></span>
+        </div>
+        <div class="results-actions">
+          <button type="button" class="btn btn--primary" id="btn-review-answers">Review answers</button>
+          <button type="button" class="btn btn--ghost" id="btn-retake">Retake exam</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Review -->
+    <section class="screen screen--review" id="screen-review" hidden>
+      <header class="topbar topbar--simple">
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true">✓</span>
+          <span>Test Now</span>
+        </div>
+        <button type="button" class="btn btn--ghost btn--small" id="btn-back-results">← Back to score</button>
+      </header>
+      <div class="review-wrap">
+        <h2>Answer review</h2>
+        <p class="lede">Green = your correct picks. Red = wrong. Grey = skipped.</p>
+        <ol class="review-list" id="review-list"></ol>
+      </div>
+    </section>
+  </div>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
