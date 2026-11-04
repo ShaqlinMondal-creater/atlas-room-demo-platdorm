@@ -78,6 +78,24 @@ export const templates = [
     },
   },
   {
+    code: "CAFE2001",
+    name: "Harbour Bean",
+    category: "Café website",
+    stack: "HTML · CSS · JS",
+    summary:
+      "Four-page café brochure: Home, About, Menu, Contact — gallery, WhatsApp, map embed, one config file for business details.",
+    previewPath: "/templates/CAFE2001/index.html",
+    thumbnail: "/thumbnails/CAFE2001.svg",
+    available: true,
+    status: "demo ready",
+    tags: ["Café", "Menu", "WhatsApp"],
+    theme: {
+      accent: "#5c7a5a",
+      soft: "#f3eee6",
+      label: "Espresso sage · Fraunces",
+    },
+  },
+  {
     code: "SHOP3301",
     name: "Marketfold",
     category: "Storefront",
